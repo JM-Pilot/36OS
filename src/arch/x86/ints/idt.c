@@ -2,7 +2,7 @@
 #include <stdint.h>
 #include <stddef.h>
 #include <libc/string.h>
-#include <drivers/video/vga.h>
+
 #include <libc/stdio.h>
 #include <kernel/kernel.h>
 extern void *isr_stub_table[];
@@ -68,7 +68,7 @@ void idt_set_entry(int n, uint64_t offset, uint16_t selector, uint8_t attr){
 }
 
 void isr_print_error(struct registers *reg){
-	vga_write_str("\nInterrupt Reached!\n");
+	printf("\nInterrupt Reached!\n");
 	printf("Interrupt: %s\n", interrupt_messages[reg->int_num]);
 	printf("EAX: %x, EBP: %x\n", reg->eax, reg->ebp);
 	printf("EBX: %x, ECX: %x\n", reg->ebx, reg->ecx);

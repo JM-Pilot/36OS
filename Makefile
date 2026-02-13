@@ -11,7 +11,8 @@ OUTPUT = 32OS
 C_OBJS = $(patsubst $(SRC)/%.c, $(BIN)/%.o, $(shell find $(SRC) -iname "*.c"))
 AS_OBJS = $(patsubst $(SRC)/%.s, $(BIN)/%.o, $(shell find $(SRC) -iname "*.s"))
 ASM_OBJS = $(patsubst $(SRC)/%.asm, $(BIN)/%.o, $(shell find $(SRC) -iname "*.asm"))
-OBJS = $(C_OBJS) $(AS_OBJS) $(ASM_OBJS)
+FONT_OBJ =   $(patsubst $(SRC)/%.psf, $(BIN)/%.o, $(shell find $(SRC) -iname "*.psf"))
+OBJS = $(C_OBJS) $(AS_OBJS) $(ASM_OBJS) $(FONT_OBJ)
 
 C_FLAGS = -ffreestanding \
 	-nostdlib \
@@ -39,6 +40,10 @@ all: $(BIN)/$(OUTPUT).iso
 $(BIN):
 	mkdir -p $@
 
+$(BIN)/%.o: $(SRC)/%.psf | $(BIN)
+	mkdir -p $(dir $@)
+	objcopy -O elf32-i386 -B i386 -I binary $< $@
+	
 $(BIN)/%.o: $(SRC)/%.c | $(BIN)
 	mkdir -p $(dir $@)
 	$(CC32) $(C_FLAGS) -c $< -o $@
@@ -62,6 +67,7 @@ $(BIN)/$(OUTPUT).iso: $(BIN)/$(OUTPUT).elf
 
 run: $(BIN)/$(OUTPUT).iso 
 	qemu-system-i386 -cdrom $< -d int,cpu_reset \
+					-m 512M \
 					-D $(BIN)/QEMU_LOGS.txt \
 					-no-reboot -no-shutdown
 

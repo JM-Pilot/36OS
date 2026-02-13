@@ -1,11 +1,14 @@
 #include <kernel/kernel.h>
 #include <libc/stdio.h>
-#include <drivers/video/vga.h>
+#include <drivers/video/console.h>
+#include <drivers/video/fb.h>
 #include <libc/string.h>
 
 void execute_command(char *cmd){
 	if (strcmp(cmd, "clear") == 0){
-		vga_clear_screen();
+		clear_fb();
+		cursor_x = 0;
+		cursor_y = 0;
 		return;
 	}
 	if (strcmp(cmd, "help") == 0){
@@ -25,7 +28,7 @@ void execute_command(char *cmd){
 		return;
 	}
 }
-void run_kernel_shell(){
+void run_kernel_shell() {
 	printf("MINI_SHELL (c) 2026 JM-Pilot\n");
 	char input_buffer[32];
 	while (1){

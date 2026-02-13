@@ -30,9 +30,13 @@ uint8_t pop_scancode() {
 char ps2_get_char(){
 	while (1) {
 		uint8_t scancode = pop_scancode();
+		if (scancode == 0) continue; 
+		if (scancode & 0x80) continue;
 		char c = scancode_to_ascii[scancode];
-		if (c != 0) 
-			return c;
+		if (scancode < 128) {
+			char c = scancode_to_ascii[scancode];
+			if (c != 0) return c;
+		}
 	}
 	return 0;
 }

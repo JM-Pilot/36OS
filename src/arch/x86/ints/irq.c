@@ -2,17 +2,17 @@
 #include <arch/x86/ints/idt.h>
 #include <stdint.h>
 #include <arch/x86/asm.h>
-#include <drivers/video/vga.h>
+
 #include <libc/stdio.h>
 #include <drivers/input/ps2.h>
 extern void* irq_stub_table[];
 
 static volatile int irq0_timer = 0;
-void irq0_timer_handler(struct registers *reg){
+void irq0_timer_handler(){
 	irq0_timer++;
 }
 
-void irq1_keyboard_handler(struct registers *reg){
+void irq1_keyboard_handler(){
 	uint8_t scancode = inb(0x60);
 	int f_head = (ps2_sc_head + 1) % 256;
 
@@ -28,10 +28,10 @@ void irq_handler(struct registers *reg){
     
 	switch (irq) {
 		case 0:
-			irq0_timer_handler(reg);
+			irq0_timer_handler();
 			break;
 		case 1:
-			irq1_keyboard_handler(reg);
+			irq1_keyboard_handler();
 			break;	
 		default:
 			break;

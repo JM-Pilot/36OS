@@ -17,6 +17,11 @@ void init_console(){
 void insert_newline(){
 	cursor_x = 0;
 	cursor_y += 16;
+
+	if (cursor_y + 16 >= fb_height) {
+		cursor_y -= 16;
+		fb_scroll_up();
+	}
 }
 
 void write_char(char c){
@@ -30,6 +35,12 @@ void write_char(char c){
 	}
 	if ((uint32_t)cursor_x + 8 > fb_width){
 		insert_newline();
+	}
+
+	if (cursor_y >= fb_height){
+		cursor_y -= 16;
+		fb_scroll_up();
+		return;
 	}
 	psf_render_char(c, cursor_x, cursor_y, console_fg, console_bg);
 	cursor_x += 8;

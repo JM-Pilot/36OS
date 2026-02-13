@@ -19,3 +19,14 @@ void clear_fb(){
 		for (int y = 0; y < fb_height; y++)
 			fb_plot_pix(x, y, 0x000000);
 }
+
+void fb_scroll_up(){
+    	uint32_t char_height = 16;
+    
+	for (uint32_t y = char_height; y < fb_height; y++)
+		for (uint32_t x = 0; x < fb_width; x++)
+			fb_addr[(y - char_height) * fb_width + x] = fb_addr[y * fb_width + x];
+	for (uint32_t y = fb_height - char_height; y < fb_height; y++)
+		for (uint32_t x = 0; x < fb_width; x++)
+			fb_addr[y * fb_width + x] = 0x000000;
+}

@@ -27,6 +27,10 @@ void execute_command(char *cmd){
 		printf("  /  \\       KERNEL: 36OS KERNEL\n");
 		return;
 	}
+	else {
+		printf("'%s' Is not a command!\n", cmd);
+		return;
+	}
 }
 void run_kernel_shell() {
 	printf("MINI_SHELL (c) 2026 JM-Pilot\n");

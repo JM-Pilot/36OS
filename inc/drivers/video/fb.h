@@ -8,4 +8,5 @@ extern uint32_t fb_height;
 void fb_init(uint64_t addr, uint32_t height, uint32_t width);
 void fb_plot_pix(int x, int y, uint32_t color);
 void clear_fb();
+void fb_scroll_up();
 #endif
